@@ -24,6 +24,8 @@ public class FreelancerService {
     private FreelancerRepository repository;
     @Autowired
     private FreelancerConverter converter;
+    @Autowired
+    private NotificationService notificationService;
 
     public FreelancerResponse createFreelancer(FreelancerRequest freelancer) {
         var entity = new Freelancer();
@@ -72,6 +74,7 @@ public class FreelancerService {
 
     private FreelancerResponse saveFreelancer(Freelancer entity){
         var savedEntity = repository.save(entity);
+        notificationService.sendMessage(savedEntity);
         return converter.convert(savedEntity);
     }
 }
