@@ -1,6 +1,7 @@
 package com.arkhanhelskaya.freelancer.service;
 
 import com.arkhanhelskaya.freelancer.exception.NotFoundException;
+import com.arkhanhelskaya.freelancer.model.EventType;
 import com.arkhanhelskaya.freelancer.model.FreelancerRequest;
 import com.arkhanhelskaya.freelancer.model.FreelancerResponse;
 import com.arkhanhelskaya.freelancer.model.FreelancerStatus;
@@ -31,20 +32,20 @@ public class FreelancerService {
         var entity = new Freelancer();
         converter.populate(entity, freelancer);
         entity.setStatus(FreelancerStatus.NEW_FREELANCER.name());
-        return saveFreelancer(entity);
+        return saveFreelancer(entity, EventType.CREATED);
     }
 
     public FreelancerResponse updateFreelancer(UUID id, FreelancerRequest freelancer) {
         var entity = getFreelancer(id);
         converter.populate(entity, freelancer);
-        return saveFreelancer(entity);
+        return saveFreelancer(entity, EventType.UPDATED);
     }
 
     public FreelancerResponse deleteFreelancer(UUID id) {
         var entity = getFreelancer(id);
         entity.setStatus(FreelancerStatus.DELETED.name());
         entity.setDeletedDate(new Date(System.currentTimeMillis()));
-        return saveFreelancer(entity);
+        return saveFreelancer(entity, EventType.DELETED);
     }
 
     public List<FreelancerResponse> getNewFreelancers() {
@@ -61,7 +62,7 @@ public class FreelancerService {
     public FreelancerResponse verifyFreelancer(UUID id) {
         var entity = getFreelancer(id);
         entity.setStatus(FreelancerStatus.VERIFIED.name());
-        return saveFreelancer(entity);
+        return saveFreelancer(entity, EventType.VERIFIED);
     }
 
     private Freelancer getFreelancer(UUID id){
@@ -72,9 +73,9 @@ public class FreelancerService {
         return entity;
     }
 
-    private FreelancerResponse saveFreelancer(Freelancer entity){
+    private FreelancerResponse saveFreelancer(Freelancer entity, EventType event){
         var savedEntity = repository.save(entity);
-        notificationService.sendMessage(savedEntity);
+        notificationService.sendMessage(savedEntity.getId(), event);
         return converter.convert(savedEntity);
     }
 }
