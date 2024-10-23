@@ -6,6 +6,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class RabbitMQConsumerService {
 
@@ -16,6 +18,7 @@ public class RabbitMQConsumerService {
     public void receiveMessage(String message) {
         var entity = new Notification();
         entity.setMessage(message);
+        entity.setCreatedAt(Instant.now());
         repository.save(entity);
     }
 }
