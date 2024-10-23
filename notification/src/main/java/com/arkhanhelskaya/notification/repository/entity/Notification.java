@@ -15,9 +15,9 @@ public class Notification {
     private UUID id;
     @Column(name = "message", nullable = false)
     private String message;
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    //@CreatedDate
+    //@Column(name = "created_at", nullable = false)
+    //private Instant createdAt;
 
     public UUID getId() {
         return id;
@@ -35,6 +35,7 @@ public class Notification {
         this.message = message;
     }
 
+    /**
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -42,4 +43,5 @@ public class Notification {
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
+     **/
 }
