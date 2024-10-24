@@ -5,14 +5,11 @@
 - Maven
 - Docker
 
-# Build and run tests using maven commands
+# Commands to build and run locally
 ```
-$ mvn clean package
-```
-
-## Run locally
-```
-$ docker-compode up
+$ mvn -f ./freelancer/pom.xml clean install
+$ mvn -f ./notification/pom.xml clean install
+$ docker-compose up
 ```
 
 # System Design Overview
